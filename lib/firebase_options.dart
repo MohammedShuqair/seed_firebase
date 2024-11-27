@@ -71,4 +71,5 @@ class DefaultFirebaseOptions {
     storageBucket: 'seed-75dc4.firebasestorage.app',
     iosBundleId: 'com.example.seedFirebase',
   );
+
 }

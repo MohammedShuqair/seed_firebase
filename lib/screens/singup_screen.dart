@@ -1,29 +1,32 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:seed_firebase/screens/singup_screen.dart';
+import 'package:seed_firebase/extentions/context_extenstion.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+
+class SignUpScreen extends StatefulWidget {
+  const SignUpScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<SignUpScreen> createState() => _SignUpScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _SignUpScreenState extends State<SignUpScreen> {
 
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
-  void signIn()async{
+  void signUp()async{
+
     try {
-      UserCredential userCredential=await FirebaseAuth.instance.signInWithEmailAndPassword(
+      UserCredential userCredential=await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: emailController.text,
           password: passwordController.text
       );
       print("userCredential ${userCredential.toString()}");
     }  catch (e,s) {
+      context.showSnackBar(e.toString());
       print("error ${e}");
       print("stack ${s}");
     }
@@ -47,8 +50,10 @@ class _LoginScreenState extends State<LoginScreen> {
     );
     return Scaffold(
       backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+      ),
       body: SingleChildScrollView(
-
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: Form(
@@ -57,11 +62,11 @@ class _LoginScreenState extends State<LoginScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 SizedBox(
-                  height: height /8,
+                  height: height /10,
                 ),
                 Text(
-                  "Sign in\nYour Account",
-                  style: Theme.of(context).textTheme.displayLarge,
+                  "Sign up\nYour Account",
+                  style: context.displayLarge,
                 ),
                 SizedBox(
                   height: height /8,
@@ -101,28 +106,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   onPressed: () async {
                     if (formKey.currentState?.validate() ?? false) {
-                      signIn();
+                      signUp();
                     }
-                  },
-                  child: Text("Login",style: Theme.of(context).textTheme.bodyLarge,),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-
-                MaterialButton(
-                  color: Theme.of(context).colorScheme.surface,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    side: BorderSide(
-                      color: Theme.of(context).colorScheme.onSurface
-                    )
-                  ),
-                  onPressed: () async {
-                  Navigator.push(context, MaterialPageRoute(builder: (_)=>SignUpScreen()));
                   },
                   child: Text("SignUp",style: Theme.of(context).textTheme.bodyLarge,),
                 ),
+
 
               ],
             ),
