@@ -69,6 +69,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '53721942604',
     projectId: 'seed-75dc4',
     storageBucket: 'seed-75dc4.firebasestorage.app',
+    androidClientId: '53721942604-4lapgs12da2hodrpi07qfclh9p6dnhsf.apps.googleusercontent.com',
+    iosClientId: '53721942604-5a7d139k06evjtf7e2a03j21tqm261ap.apps.googleusercontent.com',
     iosBundleId: 'com.example.seedFirebase',
   );
 

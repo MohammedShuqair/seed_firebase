@@ -1,6 +1,9 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:seed_firebase/extentions/context_extenstion.dart';
+import 'package:seed_firebase/screens/home_screen.dart';
 import 'package:seed_firebase/screens/singup_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -22,12 +25,30 @@ class _LoginScreenState extends State<LoginScreen> {
           email: emailController.text,
           password: passwordController.text
       );
+      context.go(HomeScreen());
       print("userCredential ${userCredential.toString()}");
     }  catch (e,s) {
       print("error ${e}");
       print("stack ${s}");
     }
 
+  }
+
+  Future<UserCredential> signInWithGoogle() async {
+    // Trigger the authentication flow
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+    // Obtain the auth details from the request
+    final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+
+    // Create a new credential
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
+
+    // Once signed in, return the UserCredential
+    return await FirebaseAuth.instance.signInWithCredential(credential);
   }
 
   @override
@@ -122,6 +143,25 @@ class _LoginScreenState extends State<LoginScreen> {
                   Navigator.push(context, MaterialPageRoute(builder: (_)=>SignUpScreen()));
                   },
                   child: Text("SignUp",style: Theme.of(context).textTheme.bodyLarge,),
+                ),
+
+                const SizedBox(
+                  height: 10,
+                ),
+
+                MaterialButton(
+                  color: Theme.of(context).colorScheme.surface,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      side: BorderSide(
+                          color: Theme.of(context).colorScheme.onSurface
+                      )
+                  ),
+                  onPressed: () async {
+                    UserCredential user=  await signInWithGoogle();
+                    print("user from google: ${user.toString()}");
+                  },
+                  child: Text("Google",style: Theme.of(context).textTheme.bodyLarge,),
                 ),
 
               ],
