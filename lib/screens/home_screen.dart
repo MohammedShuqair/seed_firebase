@@ -20,9 +20,11 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(onPressed: (){
+          FirebaseAuth.instance.signOut();
+        }, icon: Icon(Icons.arrow_back_ios)),
         actions: [
           IconButton(onPressed: (){
-
           Stream<int> stream=  createStream();
           stream.listen((value){
             setState(() {

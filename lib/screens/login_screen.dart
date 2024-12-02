@@ -25,7 +25,6 @@ class _LoginScreenState extends State<LoginScreen> {
           email: emailController.text,
           password: passwordController.text
       );
-      context.go(HomeScreen());
       print("userCredential ${userCredential.toString()}");
     }  catch (e,s) {
       print("error ${e}");
@@ -34,7 +33,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   }
 
-  Future<UserCredential> signInWithGoogle() async {
+  Future<void> signInWithGoogle() async {
     // Trigger the authentication flow
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
@@ -48,7 +47,10 @@ class _LoginScreenState extends State<LoginScreen> {
     );
 
     // Once signed in, return the UserCredential
-    return await FirebaseAuth.instance.signInWithCredential(credential);
+    UserCredential userCredential= await FirebaseAuth.instance.signInWithCredential(credential);
+     if(userCredential.user!=null){
+     }
+
   }
 
   @override
@@ -59,6 +61,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     double height = MediaQuery.sizeOf(context).height;
     print("rebuild");
     var inputDecoration = InputDecoration(
@@ -158,8 +161,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       )
                   ),
                   onPressed: () async {
-                    UserCredential user=  await signInWithGoogle();
-                    print("user from google: ${user.toString()}");
+           await signInWithGoogle();
                   },
                   child: Text("Google",style: Theme.of(context).textTheme.bodyLarge,),
                 ),
